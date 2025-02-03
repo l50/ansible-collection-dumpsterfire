@@ -1,0 +1,45 @@
+---
+# This workflow requires a GALAXY_API_KEY secret present in the GitHub
+# repository or organization.
+#
+# See: https://github.com/marketplace/actions/publish-ansible-role-to-galaxy
+# See: https://github.com/ansible/galaxy/issues/46
+name: Release
+on:
+  push:
+    tags:
+      - "*"
+# Cancel any in-progress job when a new workflow is triggered
+concurrency:
+  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.ref }}
+env:
+  ANSIBLE_GALAXY_TOKEN: ${{ secrets.GALAXY_API_KEY }}
+  PYTHON_VERSION: "3.12.6"
+  WORKING_DIRECTORY: ansible_collections/cowdogmoo/workstation
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout git repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          path: ${{ env.WORKING_DIRECTORY }}
+          fetch-depth: 0  # Fetch all history for proper versioning
+
+      - name: Set up Python
+        uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38 # v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+          cache-dependency-path: '${{ env.WORKING_DIRECTORY }}/.hooks/requirements.txt'
+
+      - name: Install dependencies
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+        run: |
+          python3 -m pip install -r .hooks/requirements.txt
+
+      - name: Release to Ansible Galaxy
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+        run: ansible-playbook -i 'localhost,' galaxy-deploy.yml -e "github_tag=${{ github.ref }}"

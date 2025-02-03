@@ -1,0 +1,123 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: true
+  vars:
+    container_user: "{{ ansible_distribution | lower }}"
+    container_home: "/home/{{ container_user }}"
+    asdf_shells:
+      - /bin/bash
+      - /bin/zsh
+  pre_tasks:
+    - name: Set home directory fact
+      ansible.builtin.set_fact:
+        ansible_env:
+          HOME: "{{ container_home }}"
+        asdf_username: "{{ container_user }}"
+        asdf_user_home: "{{ container_home }}"
+
+    - name: Check available shells
+      ansible.builtin.stat:
+        path: "{{ item }}"
+      register: shell_check
+      with_items: "{{ asdf_shells }}"
+      changed_when: false
+
+    - name: Set available shell fact
+      ansible.builtin.set_fact:
+        available_shell: "{{ (shell_check.results | selectattr('stat.exists', 'true') | list | first).item | default('/bin/bash') }}"
+
+  tasks:
+    - name: Include default variables
+      ansible.builtin.include_vars:
+        file: "../../defaults/main.yml"
+
+    - name: Check if .asdf directory exists
+      ansible.builtin.stat:
+        path: "{{ asdf_user_home }}/.asdf"
+      register: asdf_dir
+      become: "{{ ansible_facts['os_family'] != 'Darwin' }}"
+      become_user: "{{ asdf_username }}"
+
+    - name: Assert that .asdf directory exists
+      ansible.builtin.assert:
+        that:
+          - asdf_dir.stat.exists
+          - asdf_dir.stat.isdir
+
+    - name: Verify ASDF is accessible
+      ansible.builtin.shell: |
+        export ASDF_DIR="{{ asdf_user_home }}/.asdf"
+        export PATH="${ASDF_DIR}/bin:$PATH"
+        asdf --version
+      register: asdf_check
+      failed_when: asdf_check.rc != 0
+      changed_when: false
+      become: "{{ ansible_facts['os_family'] != 'Darwin' }}"
+      become_user: "{{ asdf_username }}"
+
+    - name: Check installed ASDF plugins and versions
+      ansible.builtin.shell: |
+        export ASDF_DIR="{{ asdf_user_home }}/.asdf"
+        export PATH="${ASDF_DIR}/bin:${ASDF_DIR}/shims:$PATH"
+        echo "Current PATH: $PATH"
+        echo "ASDF_DIR: $ASDF_DIR"
+        echo "Current user: $(whoami)"
+        echo "Plugin list:"
+        asdf plugin list || true
+        echo "Full list:"
+        asdf list || true
+      register: asdf_plugins_versions
+      changed_when: false
+      become: "{{ ansible_facts['os_family'] != 'Darwin' }}"
+      become_user: "{{ asdf_username }}"
+      environment:
+        HOME: "{{ asdf_user_home }}"
+        ASDF_DIR: "{{ asdf_user_home }}/.asdf"
+        USER: "{{ asdf_username }}"
+
+    - name: Check contents of .tool-versions
+      ansible.builtin.command:
+        cmd: "cat {{ asdf_user_home }}/.tool-versions"
+      register: tool_versions_content
+      changed_when: false
+      become: "{{ ansible_facts['os_family'] != 'Darwin' }}"
+      become_user: "{{ asdf_username }}"
+
+    - name: Set expected version facts
+      ansible.builtin.set_fact:
+        expected_golang_version: "{{ asdf_plugins[0].version }}"
+
+    - name: Assert .tool-versions content
+      ansible.builtin.assert:
+        that:
+          - "'golang' in tool_versions_content.stdout"
+          - "expected_golang_version in tool_versions_content.stdout"
+        fail_msg: "Expected version {{ expected_golang_version }} not found in .tool-versions"
+        success_msg: "Found expected golang version {{ expected_golang_version }}"
+
+    - name: Check shell profile setup
+      ansible.builtin.stat:
+        path: "{{ asdf_user_home }}/{{ (available_shell == '/bin/zsh') | ternary('.zshrc', '.bashrc') }}"
+      register: shell_profile
+      become: "{{ ansible_facts['os_family'] != 'Darwin' }}"
+      become_user: "{{ asdf_username }}"
+
+    - name: Assert shell profile exists
+      ansible.builtin.assert:
+        that:
+          - shell_profile.stat.exists
+          - shell_profile.stat.mode == '0644'
+
+    - name: Check shell profile content
+      ansible.builtin.command:
+        cmd: "cat {{ asdf_user_home }}/{{ (available_shell == '/bin/zsh') | ternary('.zshrc', '.bashrc') }}"
+      register: profile_content
+      changed_when: false
+      become: "{{ ansible_facts['os_family'] != 'Darwin' }}"
+      become_user: "{{ asdf_username }}"
+
+    - name: Assert shell profile content
+      ansible.builtin.assert:
+        that:
+          - "'ASDF_DIR=$HOME/.asdf' in profile_content.stdout"

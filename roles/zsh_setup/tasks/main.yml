@@ -1,0 +1,31 @@
+---
+- name: Include tasks to gather enriched users
+  ansible.builtin.include_tasks: zsh_setup_get_enriched_users.yml
+
+- name: Install required packages for zsh
+  ansible.builtin.include_role:
+    name: cowdogmoo.workstation.package_management
+  vars:
+    package_management_common_install_packages: "{{ zsh_setup_common_install_packages }}"
+
+- name: Ensure groups exist for users
+  ansible.builtin.group:
+    name: "{{ user.usergroup }}"
+    state: present
+  loop: "{{ zsh_setup_enriched_users }}"
+  loop_control:
+    loop_var: user
+
+- name: Ensure user exists
+  ansible.builtin.user:
+    name: "{{ user.username }}"
+    group: "{{ user.usergroup }}"
+    shell: "{{ user.shell }}"
+    home: "{{ user.home }}"
+    state: present
+  loop: "{{ zsh_setup_enriched_users }}"
+  loop_control:
+    loop_var: user
+
+- name: Include common tasks
+  ansible.builtin.include_tasks: common.yml
