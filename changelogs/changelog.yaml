@@ -1,0 +1,12 @@
+---
+ancestor: null
+releases:
+  1.0.0:
+    changes:
+      added:
+      - Stuff
+      changed:
+      - Things
+      removed:
+      - Bad ideas
+    release_date: '2025-02-03'

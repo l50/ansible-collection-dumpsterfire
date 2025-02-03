@@ -41,36 +41,16 @@ area/galaxy:
   - changed-files:
       - any-glob-to-any-file: "galaxy.yml"
 
-area/plugins:
+area/ansible:
   - changed-files:
-      - any-glob-to-any-file: "plugins/**/*"
+      - any-glob-to-any-file: "ansible.cfg"
 
 # Individual roles
-role/asdf:
+role/vulnerable_windows_scenarios:
   - changed-files:
-      - any-glob-to-any-file: "roles/asdf/**/*"
-
-role/logging:
-  - changed-files:
-      - any-glob-to-any-file: "roles/logging/**/*"
-
-role/package_management:
-  - changed-files:
-      - any-glob-to-any-file: "roles/package_management/**/*"
-
-role/user_setup:
-  - changed-files:
-      - any-glob-to-any-file: "roles/user_setup/**/*"
-
-role/vnc_setup:
-  - changed-files:
-      - any-glob-to-any-file: "roles/vnc_setup/**/*"
-
-role/zsh_setup:
-  - changed-files:
-      - any-glob-to-any-file: "roles/zsh_setup/**/*"
+      - any-glob-to-any-file: "roles/vulnerable_windows_scenarios/**/*"
 
 # Individual playbooks
-playbook/workstation:
+playbook/vulnerable_windows_scenarios:
   - changed-files:
-      - any-glob-to-any-file: "playbooks/workstation/**/*"
+      - any-glob-to-any-file: "playbooks/vulnerable_windows_scenarios/**/*"

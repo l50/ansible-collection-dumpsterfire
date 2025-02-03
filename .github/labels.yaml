@@ -35,6 +35,11 @@
   description: >-
     Changes made to Ansible roles
 
+- name: area/playbooks
+  color: "66CCFF" # Sky Blue
+  description: >-
+    Changes made to playbooks
+
 - name: area/taskfiles
   color: "66CCFF" # Sky Blue
   description: >-
@@ -45,47 +50,22 @@
   description: >-
     Changes made to galaxy.yml
 
-- name: area/plugins
+- name: area/ansible
   color: "FF99CC" # Pink
   description: >-
-    Changes made to plugins directory
+    Changes made to ansible configuration
 
 # Individual Roles
-- name: role/asdf
+- name: role/vulnerable_windows_scenarios
   color: "CC6699" # Dusty Rose
   description: >-
-    Changes made to asdf role
-
-- name: role/logging
-  color: "9933CC" # Purple
-  description: >-
-    Changes made to logging role
-
-- name: role/package_management
-  color: "FF3366" # Hot Pink
-  description: >-
-    Changes made to package_management role
-
-- name: role/user_setup
-  color: "FF9933" # Dark Orange
-  description: >-
-    Changes made to user_setup role
-
-- name: role/vnc_setup
-  color: "3399FF" # Bright Blue
-  description: >-
-    Changes made to vnc_setup role
-
-- name: role/zsh_setup
-  color: "CC3366" # Ruby Red
-  description: >-
-    Changes made to zsh_setup role
+    Changes made to vulnerable_windows_scenarios role
 
 # Individual Playbooks
-- name: playbook/workstation
+- name: playbook/vulnerable_windows_scenarios
   color: "FF66CC" # Bright Pink
   description: >-
-    Changes made to workstation playbook
+    Changes made to vulnerable windows scenarios playbook
 
 # Renovate
 - name: renovate/container
@@ -94,6 +74,7 @@
   color: "FFD700" # Gold
 - name: renovate/github-release
   color: "FFE4B5" # Moccasin
+
 # Semantic Type
 - name: type/digest
   color: "FFEC19" # Yellow
@@ -105,9 +86,11 @@
   color: "F6412D" # Red Orange
 - name: type/break
   color: "FF0000" # Bright Red
+
 # Release Issue
 - name: image-not-found
   color: "EE0701" # Error Red
+
 # Uncategorized
 - name: bug
   color: "D93F0B" # Dark Red
