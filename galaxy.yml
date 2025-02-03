@@ -1,12 +1,12 @@
 ---
-namespace: cowdogmoo
-name: workstation
-version: 2.0.1
+namespace: l50
+name: dumpsterfire
+version: 0.0.1
 readme: README.md
 authors:
   - Jayson Grace <techvomit.net>
-description: Install and configure utilities and applications that I employ regularly.
+description: An intentionally vulnerable Ansible collection designed for cybersecurity education and infrastructure testing
 license_file: "LICENSE"
-tags: [asdf, linux, logrotate, tools, vnc, zsh]
-repository: https://github.com/CowDogMoo/ansible-collection-workstation
-issues: https://github.com/CowDogMoo/ansible-collection-workstation/issues
+tags: [bad_decision_making, dumpsterfire, security]
+repository: https://github.com/l50/ansible-collection-dumpsterfire
+issues: https://github.com/l50/ansible-collection-dumpsterfire/issues

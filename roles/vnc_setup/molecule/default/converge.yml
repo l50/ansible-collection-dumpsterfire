@@ -1,8 +1,0 @@
----
-- name: Converge
-  hosts: all
-  gather_facts: true
-  tasks:
-    - name: Include role under test
-      ansible.builtin.include_role:
-        name: cowdogmoo.workstation.vnc_setup
