@@ -2,4 +2,4 @@
 - name: Apply Vulnerable Windows Scenarios Role
   hosts: all
   roles:
-    - role: l50.arsenal.vulnerable_windows_scenarios
+    - role: l50.dumpsterfire.vulnerable_windows_scenarios
