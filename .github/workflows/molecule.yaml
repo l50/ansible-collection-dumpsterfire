@@ -33,9 +33,9 @@ concurrency:
 
 env:
   ANSIBLE_FORCE_COLOR: "1"
-  COLLECTION_NAMESPACE: cowdogmoo
-  COLLECTION_NAME: workstation
-  COLLECTION_PATH: ansible_collections/cowdogmoo/workstation
+  COLLECTION_NAMESPACE: l50
+  COLLECTION_NAME: dumpsterfire
+  COLLECTION_PATH: ansible_collections/l50/dumpsterfire
   REQUIREMENTS_FILE: .hooks/requirements.txt
   PY_COLORS: "1"
   PYTHON_VERSION: "3.12.6"
@@ -144,7 +144,7 @@ jobs:
         shell: bash
         run: |
           ansible-galaxy collection build
-          ansible-galaxy collection install cowdogmoo-workstation-*.tar.gz --force
+          ansible-galaxy collection install l50-dumpsterfire-*.tar.gz --force
 
       - name: Run molecule test
         working-directory: ${{ env.COLLECTION_PATH }}/${{ matrix.path }}
@@ -245,7 +245,7 @@ jobs:
         shell: bash
         run: |
           ansible-galaxy collection build
-          ansible-galaxy collection install cowdogmoo-workstation-*.tar.gz --force
+          ansible-galaxy collection install l50-dumpsterfire-*.tar.gz --force
 
       - name: Run molecule test
         working-directory: ${{ env.COLLECTION_PATH }}/${{ matrix.path }}
@@ -288,18 +288,10 @@ jobs:
       max-parallel: 2
       matrix:
         include:
-          - name: "Role Test - asdf"
-            path: "roles/asdf"
-          - name: "Role Test - user_setup"
-            path: "roles/user_setup"
-          - name: "Role Test - package_management"
-            path: "roles/package_management"
-          - name: "Role Test - zsh_setup"
-            path: "roles/zsh_setup"
-          - name: "Role Test - logging"
-            path: "roles/logging"
-          - name: "Playbook Test - workstation"
-            path: "playbooks/workstation"
+          - name: "Role Test - vulnerable_windows_scenarios"
+            path: "roles/vulnerable_windows_scenarios"
+          - name: "Playbook Test - vulnerable_windows_scenarios"
+            path: "playbooks/vulnerable_windows_scenarios"
 
     steps:
       - name: Install Act dependencies
@@ -352,7 +344,7 @@ jobs:
         shell: bash
         run: |
           ansible-galaxy collection build
-          ansible-galaxy collection install cowdogmoo-workstation-*.tar.gz --force
+          ansible-galaxy collection install l50-dumpsterfire-*.tar.gz --force
 
       - name: Run molecule test
         working-directory: ${{ env.COLLECTION_PATH }}/${{ matrix.path }}

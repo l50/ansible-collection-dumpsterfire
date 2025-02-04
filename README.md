@@ -1,72 +1,74 @@
-# Ansible Collection: CowDogMoo Workstation
+# Ansible Collection: Dumpsterfire
 
-[![License](https://img.shields.io/github/license/CowDogMoo/ansible-collection-workstation?label=License&style=flat&color=blue&logo=github)](https://github.com/CowDogMoo/ansible-collection-workstation/blob/main/LICENSE)
-[![Pre-Commit](https://github.com/CowDogMoo/ansible-collection-workstation/actions/workflows/pre-commit.yaml/badge.svg)](https://github.com/CowDogMoo/ansible-collection-workstation/actions/workflows/pre-commit.yaml)
-[![Molecule Test](https://github.com/CowDogMoo/ansible-collection-workstation/actions/workflows/molecule.yaml/badge.svg)](https://github.com/CowDogMoo/ansible-collection-workstation/actions/workflows/molecule.yaml)
-[![Renovate](https://github.com/CowDogMoo/ansible-collection-workstation/actions/workflows/renovate.yaml/badge.svg)](https://github.com/CowDogMoo/ansible-collection-workstation/actions/workflows/renovate.yaml)
+[![License](https://img.shields.io/github/license/l50/ansible-collection-dumpsterfire?label=License&style=flat&color=blue&logo=github)](https://github.com/l50/ansible-collection-dumpsterfire/blob/main/LICENSE)
+[![Pre-Commit](https://github.com/l50/ansible-collection-dumpsterfire/actions/workflows/pre-commit.yaml/badge.svg)](https://github.com/l50/ansible-collection-dumpsterfire/actions/workflows/pre-commit.yaml)
+[![Molecule Test](https://github.com/l50/ansible-collection-dumpsterfire/actions/workflows/molecule.yaml/badge.svg)](https://github.com/l50/ansible-collection-dumpsterfire/actions/workflows/molecule.yaml)
+[![Renovate](https://github.com/l50/ansible-collection-dumpsterfire/actions/workflows/renovate.yaml/badge.svg)](https://github.com/l50/ansible-collection-dumpsterfire/actions/workflows/renovate.yaml)
 
-This Ansible collection provides a comprehensive setup for my
-workstation environment, covering various aspects, including user setup,
-package management, ZSH configuration, VNC setup, ASDF version manager, and
-various cybersecurity tools.
-
-## Architecture Diagram
-
-<img src=".github/images/architecture.png" alt="Architecture" width="800">
+This Ansible collection provides automated deployment of vulnerable scenarios
+for security testing, training, and research purposes.
 
 ## Requirements
 
 - Ansible 2.15 or higher
+- Windows target host(s)
 
 ## Installation
 
-Install latest version of the Workstation collection:
+Install the collection from Ansible Galaxy:
 
 ```bash
-ansible-galaxy collection install git+https://github.com/CowDogMoo/ansible-collection-workstation.git,main
+ansible-galaxy collection install git+https://github.com/l50/ansible-collection-dumpsterfire.git,main
 ```
 
 ## Roles
 
-### ASDF
+### Vulnerable Windows Scenarios
 
-Installs and configures [ASDF](https://asdf-vm.com/), a version manager for
-multiple language runtimes.
+Sets up configurable vulnerable Windows system with:
 
-### User Setup
+- Misconfigured user permissions
+- Exposed network shares
+- Sensitive documents
+- Common Windows security misconfigurations
 
-Sets up user accounts with optional sudo privileges on Unix-like systems.
+The role creates realistic scenarios commonly found in enterprise environments,
+perfect for:
 
-### Package Management
-
-Manages package installations and cleanups on Debian-based and Red Hat-based systems.
-
-### Zsh Setup
-
-Installs and configures Zsh with Oh-My-Zsh, setting up a robust shell environment.
-
-### VNC Setup
-
-Configures VNC services for remote desktop access, including password
-management and service setup.
-
-### Logging
-
-Creates logging directories and log rotation configurations for a provided path.
+- Security training and workshops
+- Penetration testing practice
+- Red team training
+- Security tool testing
 
 ## Usage
 
-Include the roles from this collection in your playbook. Here's an example:
+Include the role in your playbook:
 
 ```yaml
 ---
-- name: Provision container
-  hosts: localhost
+- name: Deploy vulnerable Windows scenario
+  hosts: windows_targets
   roles:
-    - cowdogmoo.workstation.asdf
-    - cowdogmoo.workstation.user_setup
-    - cowdogmoo.workstation.package_management
-    ...
+    - l50.dumpsterfire.vulnerable_windows_scenarios
+```
+
+## Directory Structure
+
+```bash
+.
+├── roles
+│   └── vulnerable_windows_scenarios
+│       ├── files
+│       │   └── attorney_client_privileged_intellectual_property.txt
+│       ├── tasks
+│       │   ├── documents.yml
+│       │   ├── main.yml
+│       │   ├── shares.yml
+│       │   └── users.yml
+│       ├── templates
+│       │   └── welcome.txt.j2
+│       └── vars
+│           └── main.yml
 ```
 
 ## License
@@ -76,8 +78,14 @@ file for details.
 
 ## Support
 
-- Repository: [cowdogmoo/ansible-collection-workstation](http://github.com/CowDogMoo/ansible-collection-workstation)
-- Issue Tracker: [GitHub Issues](https://github.com/CowDogMoo/ansible-collection-workstation/issues)
+- Repository: [l50/ansible-collection-dumpsterfire](http://github.com/l50/ansible-collection-dumpsterfire)
+- Issue Tracker: [GitHub Issues](https://github.com/l50/ansible-collection-dumpsterfire/issues)
+
+## Warning
+
+This collection creates intentionally vulnerable system configurations. Only
+deploy these scenarios in controlled, isolated environments intended for
+security testing and training.
 
 ## Authors
 
