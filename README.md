@@ -8,6 +8,17 @@
 This Ansible collection provides automated deployment of vulnerable scenarios
 for security testing, training, and research purposes.
 
+## Architecture Diagram
+
+```mermaid
+graph TD
+    Collection[Ansible Collection]
+    Collection --> Roles[⚙️ Roles]
+    Roles --> R0[vulnerable_windows_scenarios]
+    Collection --> Playbooks[📚 Playbooks]
+    Playbooks --> PB0[vulnerable_windows_scenarios]
+```
+
 ## Requirements
 
 - Ansible 2.15 or higher

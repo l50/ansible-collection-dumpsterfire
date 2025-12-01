@@ -1,90 +1,116 @@
-# Ansible Role: Vulnerable Windows Scenarios
+<!-- DOCSIBLE START -->
+# vulnerable_windows_scenarios
 
-This role provides scenarios for testing and training cybersecurity tools and
-techniques on Windows EC2 instances.
+## Description
+
+Scenarios is a collection of vulnerable windows scenarios for use in training
+and testing of cybersecurity tools and techniques.
+
 
 ## Requirements
 
-- Ansible 2.14 or higher.
-- Access to package repositories for required software packages.
-- AWS credentials configured to access EC2 instances.
+- Ansible >= 2.14
 
 ## Role Variables
 
-| Variable            | Default Value   | Description                             |
-| ------------------- | --------------- | --------------------------------------- |
-| `users`             | Defined in vars | List of users to be created             |
-| `shares`            | Defined in vars | List of shares to be created            |
-| `documents`         | Defined in vars | List of documents to be created         |
-| `welcome_documents` | Defined in vars | List of welcome documents to be created |
+### Role Variables (main.yml)
+
+| Variable | Type | Value | Description |
+| -------- | ---- | ----- | ----------- |
+| `vulnerable_windows_scenarios_sensitive_document_content` | str | `this is secret do not share with anyone 4f67650d0f81f138ba00675ea26cc9a4` | No description |
+| `vulnerable_windows_scenarios_share_name` | str | `DATABOX` | No description |
+| `vulnerable_windows_scenarios_users` | list | `[]` | No description |
+| `vulnerable_windows_scenarios_users.0` | dict | `{}` | No description |
+| `vulnerable_windows_scenarios_users.0.name` | str | `PaigeTurner` | No description |
+| `vulnerable_windows_scenarios_users.0.password` | str | `{{ lookup('ansible.builtin.password', '/dev/null', length=16, chars=['ascii_letters', 'digits', 'punctuation']) }}` | No description |
+| `vulnerable_windows_scenarios_users.0.description` | str | `New User` | No description |
+| `vulnerable_windows_scenarios_users.0.manager` | str | `Frank` | No description |
+| `vulnerable_windows_scenarios_users.0.mentor` | str | `Sarah` | No description |
+| `vulnerable_windows_scenarios_users.1` | dict | `{}` | No description |
+| `vulnerable_windows_scenarios_users.1.name` | str | `FrankFurter` | No description |
+| `vulnerable_windows_scenarios_users.1.password` | str | `Password123!` | No description |
+| `vulnerable_windows_scenarios_users.1.description` | str | `Description of the user` | No description |
+| `vulnerable_windows_scenarios_users.1.manager` | str | `John` | No description |
+| `vulnerable_windows_scenarios_users.1.mentor` | str | `Doe` | No description |
+| `vulnerable_windows_scenarios_shares` | list | `[]` | No description |
+| `vulnerable_windows_scenarios_shares.0` | dict | `{}` | No description |
+| `vulnerable_windows_scenarios_shares.0.name` | str | `DATABOX` | No description |
+| `vulnerable_windows_scenarios_shares.0.path` | str | `C:\Resources` | No description |
+| `vulnerable_windows_scenarios_shares.0.description` | str | `Resources Share` | No description |
+| `vulnerable_windows_scenarios_shares.0.full_access` | list | `[]` | No description |
+| `vulnerable_windows_scenarios_shares.0.full_access.0` | str | `PaigeTurner` | No description |
+| `vulnerable_windows_scenarios_shares.1` | dict | `{}` | No description |
+| `vulnerable_windows_scenarios_shares.1.name` | str | `FSERVER01` | No description |
+| `vulnerable_windows_scenarios_shares.1.path` | str | `C:\DeptFiles` | No description |
+| `vulnerable_windows_scenarios_shares.1.description` | str | `Department Files Share` | No description |
+| `vulnerable_windows_scenarios_shares.1.full_access` | list | `[]` | No description |
+| `vulnerable_windows_scenarios_shares.1.full_access.0` | str | `Everyone` | No description |
+| `vulnerable_windows_scenarios_documents` | list | `[]` | No description |
+| `vulnerable_windows_scenarios_documents.0` | dict | `{}` | No description |
+| `vulnerable_windows_scenarios_documents.0.path` | str | `C:\Resources\attorney_client_privileged_intellectual_property.txt` | No description |
+| `vulnerable_windows_scenarios_documents.0.content` | str | `{{ vulnerable_windows_scenarios_sensitive_document_content }}` | No description |
+| `vulnerable_windows_scenarios_welcome_documents` | list | `[]` | No description |
+| `vulnerable_windows_scenarios_welcome_documents.0` | dict | `{}` | No description |
+| `vulnerable_windows_scenarios_welcome_documents.0.path` | str | `C:\DeptFiles\Welcome.txt` | No description |
+| `vulnerable_windows_scenarios_welcome_documents.0.user` | dict | `{}` | No description |
+| `vulnerable_windows_scenarios_welcome_documents.0.user.name` | str | `PaigeTurner` | No description |
+| `vulnerable_windows_scenarios_welcome_documents.0.user.password` | str | `{{ lookup('ansible.builtin.password', '/dev/null', length=16, chars=['ascii_letters', 'digits', 'punctuation']) }}` | No description |
+| `vulnerable_windows_scenarios_welcome_documents.0.user.description` | str | `New User` | No description |
+| `vulnerable_windows_scenarios_welcome_documents.0.user.manager` | str | `Frank` | No description |
+| `vulnerable_windows_scenarios_welcome_documents.0.user.mentor` | str | `Sarah` | No description |
+| `vulnerable_windows_scenarios_welcome_documents.0.share` | dict | `{}` | No description |
+| `vulnerable_windows_scenarios_welcome_documents.0.share.name` | str | `DATABOX` | No description |
+| `vulnerable_windows_scenarios_welcome_documents.0.share.path` | str | `C:\Resources` | No description |
+| `vulnerable_windows_scenarios_welcome_documents.0.share.description` | str | `Resources Share` | No description |
+| `vulnerable_windows_scenarios_welcome_documents.0.share.full_access` | list | `[]` | No description |
+| `vulnerable_windows_scenarios_welcome_documents.0.share.full_access.0` | str | `PaigeTurner` | No description |
+
+## Tasks
+
+### documents.yml
+
+
+- **Create documents** (ansible.windows.win_file)
+- **Set content of documents** (community.windows.win_lineinfile)
+- **Create and populate welcome document** (ansible.builtin.template)
+
+### main.yml
+
+
+- **Include tasks for user setup** (ansible.builtin.include_tasks) - Conditional
+- **Include tasks for share setup** (ansible.builtin.include_tasks) - Conditional
+- **Include tasks for document setup** (ansible.builtin.include_tasks) - Conditional
+
+### shares.yml
+
+
+- **Ensure directories for shares exist** (ansible.windows.win_file)
+- **Create network shares** (ansible.windows.win_share)
+
+### users.yml
+
+
+- **Create users with provided details** (ansible.windows.win_user)
 
 ## Example Playbook
 
-Be sure to replace `your-s3-bucket-name` with the name of an actual S3 bucket
-in the playbook.
-
 ```yaml
----
-- name: Apply attack box configurations
-  hosts: "{{ target }}"
-  vars_files:
-    - ../../vars/main.yml
-  vars:
-    ansible_connection: aws_ssm
-    ansible_aws_ssm_bucket_name: your-s3-bucket-name
-    ansible_shell_type: powershell
+- hosts: servers
   roles:
-    - role: vulnerable_windows_scenarios
-  tasks:
-    - name: Fail if no target is provided
-      fail:
-        msg: "You must provide a target host using --extra-vars"
-      when: target is undefined or target == "none"
+    - vulnerable_windows_scenarios
 ```
-
-### Running the Playbook
-
-1. **Identify the First Instance**:
-
-   ```bash
-   first_instance=$(ansible-inventory -i playbooks/vulnerable_windows_scenarios/windows_inventory_aws_ec2.yaml \
-     --list | jq -r '._meta.hostvars | keys | sort | .[0]')
-   ```
-
-2. **Run the Playbook with the First Instance**:
-
-   ```bash
-   INVENTORY_PATH=playbooks/vulnerable_windows_scenarios/windows_inventory_aws_ec2.yaml
-   PLAYBOOK_PATH=playbooks/vulnerable_windows_scenarios/windows_scenarios.yml
-
-   ansible-playbook \
-     -i $INVENTORY_PATH \
-     $PLAYBOOK_PATH \
-     --extra-vars "target=${first_instance}"
-   ```
-
-### Running with SSM and S3 Bucket
-
-```bash
-INVENTORY_PATH=playbooks/vulnerable_windows_scenarios/windows_inventory_aws_ec2.yml
-PLAYBOOK_PATH=playbooks/vulnerable_windows_scenarios/windows_scenarios.yml
-
-ansible-playbook \
-  -i $INVENTORY_PATH \
-  -e ansible_aws_ssm_bucket_name=$AWS_S3_BUCKET_NAME \
-  -e ansible_connection=aws_ssm \
-  -e ansible_aws_ssm_region=$AWS_DEFAULT_REGION \
-  -e ansible_shell_type=powershell \
-  -e ansible_shell_executable=None \
-  -e ansible_aws_ssm_s3_addressing_style=virtual \
-  -vvvv \
-  $PLAYBOOK_PATH
-```
-
-## License
-
-MIT
 
 ## Author Information
 
-This role was created by [Jayson Grace](https://github.com/l50).
+- **Author**: Jayson Grace
+- **Company**: techvomit
+- **License**: MIT
+
+## Platforms
+
+
+- Ubuntu: all
+- macOS: all
+- EL: all
+- Windows: all
+<!-- DOCSIBLE END -->
