@@ -1,10 +1,10 @@
 ---
 collections:
   - name: amazon.aws
-    version: 9.2.0
+    version: 11.1.0
   - name: ansible.windows
-    version: 2.7.0
+    version: 3.4.0
   - name: community.docker
-    version: 4.4.0
+    version: 5.0.6
   - name: community.general
-    version: 10.4.0
+    version: 12.4.0
